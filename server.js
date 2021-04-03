@@ -66,16 +66,26 @@ socketio.on("connection", socket=>{
     clients.push(data);
     socketio.emit("sockets",clients);
 
-    socket.on("position",data=>{
-        for (var i = 0; i < clients.length; i++) {
-            if (data[2] == clients[i].id) {
+    // socket.on("position",data=>{
+    //     for (var i = 0; i < clients.length; i++) {
+    //         if (data[2] == clients[i].id) {
               
-                clients[i].x=data[0];
-                clients[i].y=data[1];
-                socketio.emit("sockets",clients);
-                console.log(clients[i].x+" : "+clients[i].y+" : "+clients[i].id);
-            }
-          }
+    //             clients[i].x=data[0];
+    //             clients[i].y=data[1];
+    //             // socketio.emit("sockets",clients);
+    //             // console.log(clients[i].x+" : "+clients[i].y+" : "+clients[i].id);
+    //         }
+    //       }
+    // })
+
+    socket.on("position",data=>{
+      
+                clients[data[3]].x=data[0];
+                clients[data[3]].y=data[1];
+                 socketio.emit("sockets",clients);
+                // console.log(clients[i].x+" : "+clients[i].y+" : "+clients[i].id);
+
+          
     })
     
 

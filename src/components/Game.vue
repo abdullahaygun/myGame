@@ -41,7 +41,7 @@ export default {
           this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
         }
         // console.log(list);
-        this.socket.emit("sockets", this.clients);
+        // this.socket.emit("sockets", this.clients);
       });
     });
   },
@@ -73,6 +73,7 @@ export default {
         this.clients[this.index].x,
         this.clients[this.index].y,
         this.clients[this.index].id,
+        this.index,
       ];
       this.socket.emit("position", data);
 
