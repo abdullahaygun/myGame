@@ -32,29 +32,26 @@ export default {
   },
 
   mounted() {
+    // this.$nextTick(() => {
     this.context = this.$refs.game.getContext("2d");
-    this.yarat();
+    this.socket.on("sockets", (list) => {
+      this.clients = list;
+      this.context.clearRect(0, 0, 600, 600);
+      for (let i = 0; i < list.length; i++) {
+        if (this.socket.id != this.clients[i].id) {
+          this.context.fillStyle = this.random_rgba();
+          this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+        } else {
+          this.context.fillStyle = "blue";
+          this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+        }
+      }
+    });
+    // });
   },
 
   methods: {
-    yarat() {
-      // this.$nextTick(() => {
-
-      this.socket.on("sockets", (list) => {
-        this.clients = list;
-        // this.context.clearRect(0, 0, 600, 600);
-        for (let i = 0; i < list.length; i++) {
-          if (this.socket.id != this.clients[i].id) {
-            this.context.fillStyle = this.random_rgba();
-            this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
-          } else {
-            this.context.fillStyle = "blue";
-            this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
-          }
-        }
-      });
-      // });
-    },
+    yarat() {},
 
     hareket(event) {
       for (var i = 0; i < this.clients.length; i++) {
@@ -100,7 +97,6 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.hareket(event);
-        this.yarat();
       }, 25);
     },
   },
