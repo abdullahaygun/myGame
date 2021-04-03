@@ -37,11 +37,14 @@ export default {
         this.clients = list;
         this.context.clearRect(0, 0, 600, 600);
         for (let i = 0; i < list.length; i++) {
-          this.context.fillStyle = list[i].c;
-          this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+          if (this.socket.id != this.clients[i].id) {
+            this.context.fillStyle = this.random_rgba();
+            this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+          } else {
+            this.context.fillStyle = "blue";
+            this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+          }
         }
-        // console.log(list);
-        // this.socket.emit("sockets", this.clients);
       });
     });
   },
@@ -53,19 +56,19 @@ export default {
           this.index = i;
         }
       }
-      if (event.key == "up" || event.key == "W" || event.key == "w") {
+      if (event.key == "W" || event.key == "w") {
         this.clients[this.index].y -= 5;
       }
 
-      if (event.key == "down" || event.key == "S" || event.key == "s") {
+      if (event.key == "S" || event.key == "s") {
         this.clients[this.index].y += 5;
       }
 
-      if (event.key == "left" || event.key == "A" || event.key == "a") {
+      if (event.key == "A" || event.key == "a") {
         this.clients[this.index].x -= 5;
       }
 
-      if (event.key == "right" || event.key == "D" || event.key == "d") {
+      if (event.key == "D" || event.key == "d") {
         this.clients[this.index].x += 5;
       }
 
@@ -76,17 +79,13 @@ export default {
         this.index,
       ];
       this.socket.emit("position", data);
+    },
 
-      this.context.clearRect(0, 0, 600, 600);
-      for (let i = 0; i < this.clients.length; i++) {
-        this.context.fillStyle = this.clients[i].c;
-        this.context.fillRect(
-          this.clients[i].x,
-          this.clients[i].y,
-          this.clients[i].w,
-          this.clients[i].h
-        );
-      }
+    random_rgba() {
+      var o = Math.round,
+        r = Math.random,
+        s = 255;
+      return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ")";
     },
   },
 };
