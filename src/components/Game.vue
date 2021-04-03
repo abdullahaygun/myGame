@@ -32,7 +32,6 @@ export default {
   },
 
   mounted() {
-    // this.$nextTick(() => {
     this.context = this.$refs.game.getContext("2d");
     this.socket.on("sockets", (list) => {
       this.clients = list;
@@ -47,7 +46,6 @@ export default {
         }
       }
     });
-    // });
   },
 
   methods: {
@@ -90,14 +88,17 @@ export default {
       return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ")";
     },
 
+    // Time(event) {
+    //   if (this.timer) {
+    //     clearTimeout(this.timer);
+    //     this.timer = null;
+    //   }
+    //   this.timer = setTimeout(() => {
+    //     this.hareket(event);
+    //   }, 25);
+    // },
     Time(event) {
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = null;
-      }
-      this.timer = setTimeout(() => {
-        this.hareket(event);
-      }, 25);
+      this.hareket(event);
     },
   },
 };
