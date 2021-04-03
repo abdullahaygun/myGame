@@ -47,6 +47,7 @@ export default {
         }
       });
     });
+    setTimeout(this.hareket(), 20);
   },
 
   methods: {

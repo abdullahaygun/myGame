@@ -1,28 +1,9 @@
-// const express=require("express");
-// const http=require("http").Server(express);
-// const port = process.env.PORT || 3000
-// const socketio=require("socket.io")(http,{
-//     cors: {
-//         //  origin: "http://localhost:8080",
-//         origin: '*',
-         
-//         credentials: true
-//       }
-// });
-
-// http.listen(port,()=>{
-//     console.log("port dinleniyor..");
-// });
-
 const express = require('express')
 const app = require('express')()
 const port = process.env.PORT || 3000
 const http = require('http').Server(app)
 const socketio = require('socket.io')(http)
 
-/*
- *  Serve /dist/ folder
- */
 app.use(express.static(__dirname + '/dist'))
 app.get(/.*/, (req, res) => {
 	res.sendFile(__dirname + '/dist/index.html')
