@@ -60,19 +60,19 @@ export default {
         }
       }
       if (event.key == "W" || event.key == "w") {
-        this.clients[this.index].y -= 5;
+        this.clients[this.index].y -= 1;
       }
 
       if (event.key == "S" || event.key == "s") {
-        this.clients[this.index].y += 5;
+        this.clients[this.index].y += 1;
       }
 
       if (event.key == "A" || event.key == "a") {
-        this.clients[this.index].x -= 5;
+        this.clients[this.index].x -= 1;
       }
 
       if (event.key == "D" || event.key == "d") {
-        this.clients[this.index].x += 5;
+        this.clients[this.index].x += 1;
       }
 
       var data = [
