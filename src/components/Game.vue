@@ -32,11 +32,17 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      this.context = this.$refs.game.getContext("2d");
+    this.context = this.$refs.game.getContext("2d");
+    this.yarat();
+  },
+
+  methods: {
+    yarat() {
+      // this.$nextTick(() => {
+
       this.socket.on("sockets", (list) => {
         this.clients = list;
-        this.context.clearRect(0, 0, 600, 600);
+        // this.context.clearRect(0, 0, 600, 600);
         for (let i = 0; i < list.length; i++) {
           if (this.socket.id != this.clients[i].id) {
             this.context.fillStyle = this.random_rgba();
@@ -47,10 +53,9 @@ export default {
           }
         }
       });
-    });
-  },
+      // });
+    },
 
-  methods: {
     hareket(event) {
       for (var i = 0; i < this.clients.length; i++) {
         if (this.socket.id == this.clients[i].id) {
@@ -95,6 +100,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.hareket(event);
+        this.yarat();
       }, 25);
     },
   },
