@@ -7,7 +7,7 @@
       v-bind:height="canvas.h"
       style="border: 2px dotted black"
       tabindex="0"
-      @keypress="hareket($event)"
+      @keypress="Time($event)"
     ></canvas>
   </div>
 </template>
@@ -23,6 +23,7 @@ export default {
       clients: [],
       canvas: { h: 600, w: 600 },
       index: -1,
+      timer: null,
     };
   },
 
@@ -47,7 +48,6 @@ export default {
         }
       });
     });
-    setTimeout(this.hareket(), 20);
   },
 
   methods: {
@@ -81,12 +81,21 @@ export default {
       ];
       this.socket.emit("position", data);
     },
-
     random_rgba() {
       var o = Math.round,
         r = Math.random,
         s = 255;
       return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ")";
+    },
+
+    Time(event) {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        this.hareket(event);
+      }, 25);
     },
   },
 };
