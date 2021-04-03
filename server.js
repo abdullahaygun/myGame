@@ -32,17 +32,11 @@ http.listen(port, () => {
 	console.log(`Listening on port ${port}`)
 })
 
-// socketio.on("connection",socket=>{
-// console.log("Biri bağlandıı"+socket.id);
-
-// socketio.emit("deneme","Merhaba Dünya");
-// })
-
-//asdsd
 
 clients=[]
 
 socketio.on("connection", socket=>{
+    console.log("Biri bağlandı."+socket.id);
     function RandomSayiUret(min,max){
         min = Math.ceil(min);
         max = Math.floor(max);
@@ -67,18 +61,33 @@ socketio.on("connection", socket=>{
         w:position.gen,
         c:random_rgba()
     };
-    console.log("Biri bağlandı."+socket.id);
     
+  
     clients.push(data);
-
     socketio.emit("sockets",clients);
+
+    socket.on("position",data=>{
+        for (var i = 0; i < clients.length; i++) {
+            if (data[2] == clients[i].id) {
+              
+                clients[i].x=data[0];
+                clients[i].y=data[1];
+                socketio.emit("sockets",clients);
+                console.log(clients[i].x+" : "+clients[i].y+" : "+clients[i].id);
+            }
+          }
+    })
+    
 
 
     socket.on("disconnecting",()=>{
         console.log("Kullanıcı çıktı", socket.id);
-       let exitSocket= clients.findIndex(elem =>{elem.socket === socket.id});
-         clients.splice(exitSocket, 1);
+       for(var i = 0; i<clients.length; i++){
+        if (socket.id == clients[i].id){
+            clients.splice(i, 1);
+        }
+       }
          socketio.emit("sockets",clients);
     })
+    
 });
-
