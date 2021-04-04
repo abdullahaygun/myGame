@@ -3,12 +3,10 @@ const app = require('express')()
 const port = process.env.PORT || 3000
 const http = require('http').Server(app)
 const socketio = require('socket.io')(http)
-
 app.use(express.static(__dirname + '/dist'))
 app.get(/.*/, (req, res) => {
 	res.sendFile(__dirname + '/dist/index.html')
 })
-
 http.listen(port, () => {
 	console.log(`Listening on port ${port}`)
 })
@@ -24,37 +22,25 @@ socketio.on("connection", socket=>{
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function random_rgba() {
-        var o = Math.round, r = Math.random, s = 255;
-        return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s)+')';
-    }
-
-    let position={
-        x:RandomSayiUret(0,600),
-        y:RandomSayiUret(0,600),
-        gen:25,
-    };
     let data={
         id:socket.id,
-        x:position.x,
-        y:position.y,
-        h:position.gen,
-        w:position.gen,
+        x:RandomSayiUret(0,600),
+        y:RandomSayiUret(0,600),
+        h:25,
+        w:25,
     };
     
-  
     clients.push(data);
     socketio.emit("sockets",clients);
 
     socket.on("position",data=>{
-      
                 clients[data[3]].x=data[0];
                 clients[data[3]].y=data[1];
-                 socketio.emit("sockets",clients);
-
-          
+                  socketio.emit("sockets",clients);
     })
-    
+
+    socketio.emit("list",clients.id);
+
 
 
     socket.on("disconnecting",()=>{
@@ -66,5 +52,5 @@ socketio.on("connection", socket=>{
        }
          socketio.emit("sockets",clients);
     })
-    
+
 });

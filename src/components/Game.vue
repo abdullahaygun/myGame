@@ -24,6 +24,7 @@ export default {
       canvas: { h: 600, w: 600 },
       index: -1,
       timer: null,
+      data: null,
     };
   },
 
@@ -37,7 +38,7 @@ export default {
       this.clients = list;
       this.context.clearRect(0, 0, 600, 600);
       for (let i = 0; i < list.length; i++) {
-        if (this.socket.id != this.clients[i].id) {
+        if (this.socket.id != list[i].id) {
           this.context.fillStyle = this.random_rgba();
           this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
         } else {
@@ -49,8 +50,6 @@ export default {
   },
 
   methods: {
-    yarat() {},
-
     hareket(event) {
       for (var i = 0; i < this.clients.length; i++) {
         if (this.socket.id == this.clients[i].id) {
@@ -58,28 +57,28 @@ export default {
         }
       }
       if (event.key == "W" || event.key == "w") {
-        this.clients[this.index].y -= 1;
+        this.clients[this.index].y -= 5;
       }
 
       if (event.key == "S" || event.key == "s") {
-        this.clients[this.index].y += 1;
+        this.clients[this.index].y += 5;
       }
 
       if (event.key == "A" || event.key == "a") {
-        this.clients[this.index].x -= 1;
+        this.clients[this.index].x -= 5;
       }
 
       if (event.key == "D" || event.key == "d") {
-        this.clients[this.index].x += 1;
+        this.clients[this.index].x += 5;
       }
 
-      var data = [
+      this.data = [
         this.clients[this.index].x,
         this.clients[this.index].y,
         this.clients[this.index].id,
         this.index,
       ];
-      this.socket.emit("position", data);
+      this.socket.emit("position", this.data);
     },
     random_rgba() {
       var o = Math.round,
