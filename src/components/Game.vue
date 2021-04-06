@@ -29,7 +29,8 @@ export default {
   },
 
   created() {
-    this.socket = io("/");
+    // this.socket = io("/");
+    this.socket = io("https://mygametrserver.herokuapp.com");
   },
 
   mounted() {
