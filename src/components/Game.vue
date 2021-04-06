@@ -29,8 +29,7 @@ export default {
   },
 
   created() {
-    // this.socket = io("/");
-    this.socket = io("https://mygametrserver.herokuapp.com");
+    this.socket = io("/");
   },
 
   mounted() {
@@ -39,15 +38,13 @@ export default {
       this.clients = list;
       this.context.clearRect(0, 0, 600, 600);
       for (let i = 0; i < list.length; i++) {
-        this.context.fillStyle = "blue";
-        this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
-        // if (this.socket.id != list[i].id) {
-        //   this.context.fillStyle = this.random_rgba();
-        //   this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
-        // } else {
-        //   this.context.fillStyle = "blue";
-        //   this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
-        // }
+        if (this.socket.id != list[i].id) {
+          this.context.fillStyle = this.random_rgba();
+          this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+        } else {
+          this.context.fillStyle = "blue";
+          this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+        }
       }
     });
   },
