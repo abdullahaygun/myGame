@@ -7,7 +7,7 @@
       v-bind:height="canvas.h"
       style="border: 2px dotted black"
       tabindex="0"
-      @keypress="Time($event)"
+      @keypress="hareket($event)"
     ></canvas>
   </div>
 </template>
@@ -20,11 +20,11 @@ export default {
     return {
       socket: {},
       context: {},
-      clients: [],
       canvas: { h: 600, w: 600 },
-      index: -1,
+      oyuncular: [],
       timer: null,
-      data: null,
+      index: -1,
+      data: [],
     };
   },
 
@@ -34,70 +34,79 @@ export default {
 
   mounted() {
     this.context = this.$refs.game.getContext("2d");
-    this.socket.on("sockets", (list) => {
-      this.clients = list;
+    this.socket.on("AllPlayer", (data) => {
+      this.oyuncular = data;
+      console.log("test AllPlayer");
+    });
+    setInterval(() => {
       this.context.clearRect(0, 0, 600, 600);
-      for (let i = 0; i < list.length; i++) {
-        if (this.socket.id != list[i].id) {
-          this.context.fillStyle = this.random_rgba();
-          this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
-        } else {
+      for (let i = 0; i < this.oyuncular.length; i++) {
+        if (this.oyuncular[i].id == this.socket.id) {
           this.context.fillStyle = "blue";
-          this.context.fillRect(list[i].x, list[i].y, list[i].w, list[i].h);
+        } else {
+          this.context.fillStyle = this.oyuncular[i].c;
+        }
+        this.context.fillRect(
+          this.oyuncular[i].x,
+          this.oyuncular[i].y,
+          this.oyuncular[i].gen,
+          this.oyuncular[i].gen
+        );
+      }
+      console.log("test setInterval");
+    }, 20);
+
+    this.socket.on("exitPlayer", (soket) => {
+      for (let i = 0; i < this.oyuncular.length; i++) {
+        if (this.oyuncular[i].id == soket) {
+          this.oyuncular.splice(i, 1);
         }
       }
     });
+
+    // this.socket.on("AllPlayer",data=>{
+    //   for (let i = 0; i < data.length; i++) {
+    //     if(data[i].id==oyuncular)
+
+    //   }
+    // })
   },
 
   methods: {
     hareket(event) {
-      for (var i = 0; i < this.clients.length; i++) {
-        if (this.socket.id == this.clients[i].id) {
+      for (var i = 0; i < this.oyuncular.length; i++) {
+        if (this.socket.id == this.oyuncular[i].id) {
           this.index = i;
         }
       }
       if (event.key == "W" || event.key == "w") {
-        this.clients[this.index].y -= 5;
+        this.oyuncular[this.index].y -= 5;
       }
 
       if (event.key == "S" || event.key == "s") {
-        this.clients[this.index].y += 5;
+        this.oyuncular[this.index].y += 5;
       }
 
       if (event.key == "A" || event.key == "a") {
-        this.clients[this.index].x -= 5;
+        this.oyuncular[this.index].x -= 5;
       }
 
       if (event.key == "D" || event.key == "d") {
-        this.clients[this.index].x += 5;
+        this.oyuncular[this.index].x += 5;
       }
 
       this.data = [
-        this.clients[this.index].x,
-        this.clients[this.index].y,
-        this.clients[this.index].id,
+        this.oyuncular[this.index].x,
+        this.oyuncular[this.index].y,
+        this.oyuncular[this.index].id,
         this.index,
       ];
-      this.socket.emit("position", this.data);
+      this.socket.emit("AllPlayer", this.data);
     },
-    random_rgba() {
-      var o = Math.round,
-        r = Math.random,
-        s = 255;
-      return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ")";
-    },
-
-    // Time(event) {
-    //   if (this.timer) {
-    //     clearTimeout(this.timer);
-    //     this.timer = null;
-    //   }
-    //   this.timer = setTimeout(() => {
-    //     this.hareket(event);
-    //   }, 25);
-    // },
-    Time(event) {
-      this.hareket(event);
+    tikla() {
+      this.socket.on("AllPlayer", (list) => {
+        console.log(list);
+      });
     },
   },
 };

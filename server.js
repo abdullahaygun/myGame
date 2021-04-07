@@ -9,48 +9,52 @@ app.get(/.*/, (req, res) => {
 })
 http.listen(port, () => {
 	console.log(`Listening on port ${port}`)
-})
+});
 
+oyuncular=[];
 
-clients=[]
 
 socketio.on("connection", socket=>{
     console.log("Biri bağlandı."+socket.id);
-    function RandomSayiUret(min,max){
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    let data={
-        id:socket.id,
-        x:RandomSayiUret(0,600),
-        y:RandomSayiUret(0,600),
-        h:25,
-        w:25,
-    };
     
-    clients.push(data);
-    socketio.emit("sockets",clients);
+    function random_rgba() {
+        var o = Math.round,
+          r = Math.random,
+          s = 255;
+        return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ")";
+      };
+        function randomSayi(min,max){
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+    
+        let data={
+            id:socket.id,
+            x:randomSayi(30,580),
+            y:randomSayi(30,580),
+            gen:25,
+            c:random_rgba()
+        };
 
-    socket.on("position",data=>{
-                clients[data[3]].x=data[0];
-                clients[data[3]].y=data[1];
-                  socketio.emit("sockets",clients);
-    })
-
-    socketio.emit("list",clients.id);
+        // socketio.emit("newPlayer",data);
+        oyuncular.push(data);
+        socketio.emit("AllPlayer",oyuncular);
 
 
-
-    socket.on("disconnecting",()=>{
+        socket.on("disconnecting",()=>{
         console.log("Kullanıcı çıktı", socket.id);
-       for(var i = 0; i<clients.length; i++){
-        if (socket.id == clients[i].id){
-            clients.splice(i, 1);
+        for(var i = 0; i<oyuncular.length; i++){
+            if (socket.id == oyuncular[i].id){
+                oyuncular.splice(i, 1);
+            }
         }
-       }
-         socketio.emit("sockets",clients);
-    })
+        socketio.emit("exitPlayer",socket.id);
+        socketio.emit("AllPlayer",oyuncular);
+        });
+    
+    });
 
-});
+
+
+
