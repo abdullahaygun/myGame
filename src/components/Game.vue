@@ -36,7 +36,6 @@ export default {
     this.context = this.$refs.game.getContext("2d");
     this.socket.on("AllPlayer", (data) => {
       this.oyuncular = data;
-      // console.log("test AllPlayer");
     });
     setInterval(() => {
       this.context.clearRect(0, 0, 600, 600);
@@ -54,7 +53,7 @@ export default {
         );
       }
       // console.log("test setInterval");
-    }, 100);
+    }, 30);
 
     this.socket.on("exitPlayer", (soket) => {
       for (let i = 0; i < this.oyuncular.length; i++) {
@@ -87,8 +86,6 @@ export default {
       if (event.key == "D" || event.key == "d") {
         this.oyuncular[this.index].x += 5;
       }
-      console.log(this.oyuncular[0].x);
-
       this.socket.emit("pos", this.oyuncular);
     },
   },

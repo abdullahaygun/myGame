@@ -38,7 +38,7 @@ socketio.on("connection", socket=>{
             c:random_rgba()
         };
         oyuncular.push(data);
-        socketio.emit("AllPlayer",oyuncular);
+         socketio.emit("AllPlayer",oyuncular);
 
         socket.on("pos",(data)=>{
             oyuncular=data;
