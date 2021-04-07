@@ -36,7 +36,7 @@ export default {
     this.context = this.$refs.game.getContext("2d");
     this.socket.on("AllPlayer", (data) => {
       this.oyuncular = data;
-      console.log("test AllPlayer");
+      // console.log("test AllPlayer");
     });
     setInterval(() => {
       this.context.clearRect(0, 0, 600, 600);
@@ -53,7 +53,7 @@ export default {
           this.oyuncular[i].gen
         );
       }
-      console.log("test setInterval");
+      // console.log("test setInterval");
     }, 20);
 
     this.socket.on("exitPlayer", (soket) => {
@@ -63,13 +63,6 @@ export default {
         }
       }
     });
-
-    // this.socket.on("AllPlayer",data=>{
-    //   for (let i = 0; i < data.length; i++) {
-    //     if(data[i].id==oyuncular)
-
-    //   }
-    // })
   },
 
   methods: {
@@ -94,19 +87,9 @@ export default {
       if (event.key == "D" || event.key == "d") {
         this.oyuncular[this.index].x += 5;
       }
+      console.log(this.oyuncular[0].x);
 
-      this.data = [
-        this.oyuncular[this.index].x,
-        this.oyuncular[this.index].y,
-        this.oyuncular[this.index].id,
-        this.index,
-      ];
-      this.socket.emit("AllPlayer", this.data);
-    },
-    tikla() {
-      this.socket.on("AllPlayer", (list) => {
-        console.log(list);
-      });
+      this.socket.emit("pos", this.oyuncular);
     },
   },
 };

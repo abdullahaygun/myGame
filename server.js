@@ -11,8 +11,9 @@ http.listen(port, () => {
 	console.log(`Listening on port ${port}`)
 });
 
-oyuncular=[];
 
+
+oyuncular=[];
 
 socketio.on("connection", socket=>{
     console.log("Biri bağlandı."+socket.id);
@@ -36,10 +37,13 @@ socketio.on("connection", socket=>{
             gen:25,
             c:random_rgba()
         };
-
-        // socketio.emit("newPlayer",data);
         oyuncular.push(data);
         socketio.emit("AllPlayer",oyuncular);
+
+        socket.on("pos",(data)=>{
+            oyuncular=data;
+            socketio.emit("AllPlayer",oyuncular);
+        })
 
 
         socket.on("disconnecting",()=>{
@@ -49,7 +53,6 @@ socketio.on("connection", socket=>{
                 oyuncular.splice(i, 1);
             }
         }
-        socketio.emit("exitPlayer",socket.id);
         socketio.emit("AllPlayer",oyuncular);
         });
     
