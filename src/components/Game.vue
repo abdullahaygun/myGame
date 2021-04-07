@@ -54,7 +54,7 @@ export default {
         );
       }
       // console.log("test setInterval");
-    }, 20);
+    }, 100);
 
     this.socket.on("exitPlayer", (soket) => {
       for (let i = 0; i < this.oyuncular.length; i++) {
