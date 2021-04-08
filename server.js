@@ -18,6 +18,9 @@ oyuncular=[];
 socketio.on("connection", socket=>{
     console.log("Biri bağlandı."+socket.id);
     
+    
+    
+    
     function random_rgba() {
         var o = Math.round,
           r = Math.random,
@@ -38,12 +41,36 @@ socketio.on("connection", socket=>{
             c:random_rgba()
         };
         oyuncular.push(data);
-         socketio.emit("AllPlayer",oyuncular);
-
-        socket.on("pos",(data)=>{
-            oyuncular=data;
+        socketio.emit("AllPlayer",oyuncular);
+        var index=null;
+        socket.on("pos",data=>{
+            for (var i = 0; i < oyuncular.length; i++) {
+                if (data.id == oyuncular[i].id) {
+                    index = i;
+                }
+            }
+            if (data.key == "W" || data.key == "w") {
+              oyuncular[index].y -= 5;
+            }
+      
+            if (data.key == "S" || data.key == "s") {
+              oyuncular[index].y += 5;
+            }
+      
+            if (data.key == "A" || data.key == "a") {
+              oyuncular[index].x -= 5;
+            }
+      
+            if (data.key == "D" || data.key == "d") {
+              oyuncular[index].x += 5;
+            }
             socketio.emit("AllPlayer",oyuncular);
-        })
+    });
+
+        // socketio.on("pos",(data)=>{
+        //     oyuncular=data;
+        //     socket.emit("AllPlayer",oyuncular);
+        // })
 
 
         socket.on("disconnecting",()=>{

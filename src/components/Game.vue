@@ -52,41 +52,33 @@ export default {
           this.oyuncular[i].gen
         );
       }
-      // console.log("test setInterval");
     }, 30);
-
-    this.socket.on("exitPlayer", (soket) => {
-      for (let i = 0; i < this.oyuncular.length; i++) {
-        if (this.oyuncular[i].id == soket) {
-          this.oyuncular.splice(i, 1);
-        }
-      }
-    });
   },
 
   methods: {
     hareket(event) {
-      for (var i = 0; i < this.oyuncular.length; i++) {
-        if (this.socket.id == this.oyuncular[i].id) {
-          this.index = i;
-        }
-      }
-      if (event.key == "W" || event.key == "w") {
-        this.oyuncular[this.index].y -= 5;
-      }
+      // for (var i = 0; i < this.oyuncular.length; i++) {
+      //   if (this.socket.id == this.oyuncular[i].id) {
+      //     this.index = i;
+      //   }
+      // }
+      // if (event.key == "W" || event.key == "w") {
+      //   this.oyuncular[this.index].y -= 5;
+      // }
 
-      if (event.key == "S" || event.key == "s") {
-        this.oyuncular[this.index].y += 5;
-      }
+      // if (event.key == "S" || event.key == "s") {
+      //   this.oyuncular[this.index].y += 5;
+      // }
 
-      if (event.key == "A" || event.key == "a") {
-        this.oyuncular[this.index].x -= 5;
-      }
+      // if (event.key == "A" || event.key == "a") {
+      //   this.oyuncular[this.index].x -= 5;
+      // }
 
-      if (event.key == "D" || event.key == "d") {
-        this.oyuncular[this.index].x += 5;
-      }
-      this.socket.emit("pos", this.oyuncular);
+      // if (event.key == "D" || event.key == "d") {
+      //   this.oyuncular[this.index].x += 5;
+      // }
+      let data = { id: this.socket.id, key: event.key };
+      this.socket.emit("pos", data);
     },
   },
 };
