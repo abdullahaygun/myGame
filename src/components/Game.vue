@@ -37,22 +37,22 @@ export default {
     this.socket.on("AllPlayer", (data) => {
       this.oyuncular = data;
     });
-    // setInterval(() => {
-    this.context.clearRect(0, 0, 600, 600);
-    for (let i = 0; i < this.oyuncular.length; i++) {
-      if (this.oyuncular[i].id == this.socket.id) {
-        this.context.fillStyle = "blue";
-      } else {
-        this.context.fillStyle = this.oyuncular[i].c;
+    setInterval(() => {
+      this.context.clearRect(0, 0, 600, 600);
+      for (let i = 0; i < this.oyuncular.length; i++) {
+        if (this.oyuncular[i].id == this.socket.id) {
+          this.context.fillStyle = "blue";
+        } else {
+          this.context.fillStyle = this.oyuncular[i].c;
+        }
+        this.context.fillRect(
+          this.oyuncular[i].x,
+          this.oyuncular[i].y,
+          this.oyuncular[i].gen,
+          this.oyuncular[i].gen
+        );
       }
-      this.context.fillRect(
-        this.oyuncular[i].x,
-        this.oyuncular[i].y,
-        this.oyuncular[i].gen,
-        this.oyuncular[i].gen
-      );
-    }
-    // }, 30);
+    }, 20);
   },
 
   methods: {
