@@ -7,7 +7,8 @@
       v-bind:height="canvas.h"
       style="border: 2px dotted black"
       tabindex="0"
-      @keypress="hareket($event)"
+      @keydown="down($event)"
+      @keyup="up($event)"
     ></canvas>
   </div>
 </template>
@@ -38,7 +39,7 @@ export default {
       this.oyuncular = data;
     });
     setInterval(() => {
-      this.context.clearRect(0, 0, 600, 600);
+      this.context.clearRect(0, 0, this.canvas.w, this.canvas.h);
       for (let i = 0; i < this.oyuncular.length; i++) {
         if (this.oyuncular[i].id == this.socket.id) {
           this.context.fillStyle = "blue";
@@ -56,9 +57,16 @@ export default {
   },
 
   methods: {
-    hareket(event) {
+    down(event) {
       let data = { id: this.socket.id, key: event.key };
-      this.socket.emit("pos", data);
+      this.socket.emit("down", data);
+      this.socket.emit("move", data);
+    },
+
+    up(event) {
+      let data = { id: this.socket.id, key: event.key };
+      this.socket.emit("up", data);
+      this.socket.emit("move", data);
     },
   },
 };
