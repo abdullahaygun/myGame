@@ -8,7 +8,7 @@ app.get(/.*/, (req, res) => {
 	res.sendFile(__dirname + '/dist/index.html')
 })
 http.listen(port, () => {
-	console.log(`Listening on port ${port}`)
+	console.log(`Dinleniyor.. ${port}`)
 });
 
 
@@ -16,11 +16,7 @@ http.listen(port, () => {
 oyuncular=[];
 
 socketio.on("connection", socket=>{
-    console.log("Biri bağlandı."+socket.id);
-    
-    
-    
-    
+    console.log("Biri bağlandı."+socket.id);  
     function random_rgba() {
         var o = Math.round,
           r = Math.random,
@@ -66,11 +62,6 @@ socketio.on("connection", socket=>{
             }
             socketio.emit("AllPlayer",oyuncular);
     });
-
-        // socketio.on("pos",(data)=>{
-        //     oyuncular=data;
-        //     socket.emit("AllPlayer",oyuncular);
-        // })
 
 
         socket.on("disconnecting",()=>{
