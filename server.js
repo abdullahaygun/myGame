@@ -32,18 +32,25 @@ socketio.on("connection", socket=>{
             max = Math.floor(max);
             return Math.floor(Math.random() * (max - min + 1)) + min;
       };
+    let canvas={
+        w:750,
+        h:750
+    };
     
     let data={
         id:socket.id,
-        x:randomSayi(30,580),
-        y:randomSayi(30,580),
-        gen:25,
+        x:randomSayi(50,canvas.w-50),
+        y:randomSayi(50,canvas.h-50),
+        gen:40,
         c:random_rgba(),
         LEFT:null,
         UP:null,
         RIGHT:null,
         DOWN:null
     };
+
+    
+    socketio.emit("infCanvas",canvas);
 
     oyuncular.push(data);
     socketio.emit("AllPlayer",oyuncular);

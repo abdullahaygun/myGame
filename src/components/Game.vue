@@ -5,7 +5,6 @@
       ref="game"
       v-bind:width="canvas.w"
       v-bind:height="canvas.h"
-      style="border: 2px dotted black"
       tabindex="0"
       @keydown="down($event)"
       @keyup="up($event)"
@@ -21,7 +20,7 @@ export default {
     return {
       socket: {},
       context: {},
-      canvas: { h: 600, w: 600 },
+      canvas: { h: null, w: null },
       oyuncular: [],
       timer: null,
       index: -1,
@@ -35,6 +34,9 @@ export default {
 
   mounted() {
     this.context = this.$refs.game.getContext("2d");
+    this.socket.on("infCanvas", (data) => {
+      this.canvas = data;
+    });
     this.socket.on("AllPlayer", (data) => {
       this.oyuncular = data;
     });
@@ -73,4 +75,18 @@ export default {
 </script>
 
 <style scoped>
+#canvas {
+  border: 5px dotted blue;
+  border-radius: 15px;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 50%;
+  background-color: snow;
+}
+.game {
+  background-color: gainsboro;
+}
 </style>
