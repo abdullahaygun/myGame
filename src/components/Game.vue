@@ -55,7 +55,7 @@ export default {
           this.oyuncular[i].gen
         );
       }
-    }, 20);
+    }, 1000 / 60);
   },
 
   methods: {
