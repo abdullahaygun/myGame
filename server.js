@@ -14,9 +14,7 @@ http.listen(port, () => {
 
 
 oyuncular=[];
-socketio.on("down",(data)=>{
-    console.log(data);
-})
+
 socketio.on("connection", socket=>{
     console.log("Biri bağlandı."+socket.id); 
 
@@ -34,7 +32,7 @@ socketio.on("connection", socket=>{
       };
     let canvas={
         w:750,
-        h:750
+        h:700
     };
     
     let data={
@@ -46,7 +44,13 @@ socketio.on("connection", socket=>{
         LEFT:null,
         UP:null,
         RIGHT:null,
-        DOWN:null
+        DOWN:null,
+        friction:0.15,
+        vel_x:0,
+        vel_y:0,
+        acc_x:0,
+        acc_y:0,
+        acceleration:1
     };
 
     
@@ -109,20 +113,35 @@ socketio.on("connection", socket=>{
             }
         }
 
-        if( oyuncular[index].LEFT){
-            oyuncular[index].x=oyuncular[index].x-5;
+        if(oyuncular[index].LEFT){
+            oyuncular[index].acc_x=-oyuncular[index].acceleration;
         }
-        if( oyuncular[index].UP){
-            oyuncular[index].y=oyuncular[index].y-5;
+        if(oyuncular[index].UP){
+            oyuncular[index].acc_y=-oyuncular[index].acceleration;
         }
-        if( oyuncular[index].RIGHT){
-            oyuncular[index].x=oyuncular[index].x+5;
+        if(oyuncular[index].RIGHT){
+            oyuncular[index].acc_x=oyuncular[index].acceleration;
         }
-        if( oyuncular[index].DOWN){
-            oyuncular[index].y=oyuncular[index].y+5;
+        if(oyuncular[index].DOWN){
+            oyuncular[index].acc_y=oyuncular[index].acceleration;
         }
-        // console.log(oyuncular[index]);
+
+        if(!oyuncular[index].DOWN && !oyuncular[index].UP){
+            oyuncular[index].acc_y=0;
+        }
+
+        if(!oyuncular[index].LEFT && !oyuncular[index].RIGHT){
+            oyuncular[index].acc_x=0;
+        }
+
+        oyuncular[index].vel_x+= oyuncular[index].acc_x;
+        oyuncular[index].vel_y+= oyuncular[index].acc_y;
+        oyuncular[index].vel_x*= 1-oyuncular[index].friction;
+        oyuncular[index].vel_y*= 1-oyuncular[index].friction;
+        oyuncular[index].x+=oyuncular[index].vel_x;
+        oyuncular[index].y+=oyuncular[index].vel_y;
         socketio.emit("AllPlayer",oyuncular);
+        // console.log(oyuncular[index]);
     })
         
 
